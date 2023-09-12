@@ -11,10 +11,12 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.5.0",
+    "dayjs": "^1.11.9",
+    "device-detector-js": "^3.0.3",
+    "firebase": "^10.3.1",
     "material-react-table": "^1.14.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-native-device-info": "^10.9.0",
     "react-query": "^3.39.3",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
