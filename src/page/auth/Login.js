@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { Button, Stack } from "@mui/material";
 import { addDoc, collection } from "firebase/firestore";
@@ -11,13 +11,36 @@ export default function Login() {
   const DeviceCollectionRef = collection(db, "deviceInfo");
   const deviceDetector = new DeviceDetector();
   const device = deviceDetector.parse(navigator.userAgent);
+  const [cookie, setCookie] = useState("");
+  useEffect(() => {
+    // Check if a device identifier exists in the cookie
+    const deviceIdentifier = getCookie("device_id");
+    setCookie(deviceIdentifier);
+    if (!deviceIdentifier) {
+      // Generate a unique identifier and store it in a cookie
+      const uniqueIdentifier = generateUniqueIdentifier();
+      document.cookie = `device_id=${uniqueIdentifier}; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/`;
+    }
+  }, []);
+
+  const getCookie = (name) => {
+    const cookieValue = document.cookie.match(
+      `(^|;)\\s*${name}\\s*=\\s*([^;]+)`
+    );
+    return cookieValue ? cookieValue.pop() : null;
+  };
+
+  const generateUniqueIdentifier = () => {
+    // Generate a unique identifier (you may want to use a more sophisticated method)
+    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  };
 
   const create = async () => {
-    console.log("hi");
     const platformInfo = device.os.name + " " + device.os.version;
     const date = new Date();
     await addDoc(DeviceCollectionRef, {
       date: date.toISOString(),
+      uniqueId: cookie,
       platform_npm: platformInfo,
       platform: navigator.userAgent,
       sessionStart: date.toISOString(),
@@ -54,6 +77,7 @@ export default function Login() {
         // ...
       });
   };
+
   return (
     <Stack justifyContent="center" alignItems="center" sx={{ height: "100vh" }}>
       <Button variant="contained" onClick={handleLogin}>

@@ -23,27 +23,6 @@ function DetectDevice() {
   //   }
   // }, []);
 
-  useEffect(() => {
-    // Check if a device identifier exists in the cookie
-    const deviceIdentifier = getCookie("device_id");
-    if (!deviceIdentifier) {
-      // Generate a unique identifier and store it in a cookie
-      const uniqueIdentifier = generateUniqueIdentifier();
-      document.cookie = `device_id=${uniqueIdentifier}`;
-    }
-  }, []);
-  const getCookie = (name) => {
-    const cookieValue = document.cookie.match(
-      `(^|;)\\s*${name}\\s*=\\s*([^;]+)`
-    );
-    return cookieValue ? cookieValue.pop() : null;
-  };
-
-  const generateUniqueIdentifier = () => {
-    // Generate a unique identifier (you may want to use a more sophisticated method)
-    return Date.now().toString(36) + Math.random().toString(36);
-  };
-
   // crud -----------------------------------------
   useEffect(() => {
     get();
@@ -86,7 +65,7 @@ function DetectDevice() {
             return (
               <tr key={i}>
                 <td>{i}</td>
-                <td></td>
+                <td>{item?.uniqueId}</td>
                 <td>{dayjs(item.date).format("DD-MM-YYYY hh:ss A")}</td>
                 <td>{item.platform}</td>
                 <td>{item.platform_npm}</td>
