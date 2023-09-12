@@ -1,7 +1,5 @@
-import DeviceDetector from "device-detector-js";
 import React, { useEffect, useState } from "react";
 import {
-  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -49,6 +47,7 @@ function DetectDevice() {
   // crud -----------------------------------------
   useEffect(() => {
     get();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const get = async () => {
