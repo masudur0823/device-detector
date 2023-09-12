@@ -16,8 +16,6 @@ function DetectDevice() {
   // const [isOnline, setIsOnline] = useState(false);
   const [data, setData] = useState([]);
   const DeviceCollectionRef = collection(db, "deviceInfo");
-  const deviceDetector = new DeviceDetector();
-  const device = deviceDetector.parse(navigator.userAgent);
 
   // useEffect(() => {
   //   if (navigator.onLine === true) {
@@ -61,22 +59,6 @@ function DetectDevice() {
     setData(finalRes);
   };
 
-  const create = async () => {
-    const platformInfo = device.os.name + " " + device.os.version;
-    const date = new Date();
-    await addDoc(DeviceCollectionRef, {
-      date: date.toISOString(),
-      platform_npm: platformInfo,
-      platform: navigator.userAgent,
-      sessionStart: date.toISOString(),
-      sessionEnd: date.toISOString(),
-      token: "cdkmckmkdmkf",
-      userName: "imtiaz",
-      phone: "01980573601",
-    });
-    get();
-  };
-
   const handleDelete = async (id) => {
     const expenseDoc = doc(db, "deviceInfo", id);
     await deleteDoc(expenseDoc);
@@ -87,7 +69,6 @@ function DetectDevice() {
 
   return (
     <>
-      <button onClick={create}>Login {"=>"}</button>
       <table border="1px solid gry" cellPadding="0" cellSpacing="0">
         <thead>
           <tr>

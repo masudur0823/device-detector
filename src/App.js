@@ -7,12 +7,24 @@ import Home from "./page/Home";
 function App() {
   const queryClient = new QueryClient();
   const token = localStorage.getItem("accessToken");
+  let data = JSON.parse(localStorage.getItem("userInfo"));
+
   return (
     <>
       <QueryClientProvider client={queryClient}>
         {/* <BasicTable /> */}
-        {/* <DetectDevice /> */}
-        {!token ? <Login /> : <Home />}
+
+        {!token ? (
+          <Login />
+        ) : (
+          <>
+            {data.email === "masudur0823@gmail.com" ? (
+              <DetectDevice />
+            ) : (
+              <Home />
+            )}
+          </>
+        )}
       </QueryClientProvider>
     </>
   );
