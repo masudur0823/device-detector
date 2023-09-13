@@ -52,11 +52,14 @@ function DetectDevice() {
           <tr>
             <th>Serial</th>
             <th>Unique ID</th>
+            <th>Name</th>
+            <th>Email</th>
             <th>Date</th>
-            <th>PlatForm (userAgent)</th>
+            {/* <th>PlatForm (userAgent)</th> */}
             <th>PlatForm_npm</th>
             <th>session Start time</th>
             <th>session End time</th>
+            <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -66,8 +69,10 @@ function DetectDevice() {
               <tr key={i}>
                 <td>{i}</td>
                 <td>{item?.uniqueId}</td>
+                <td>{item?.name}</td>
+                <td>{item?.email}</td>
                 <td>{dayjs(item.date).format("DD-MM-YYYY hh:ss A")}</td>
-                <td>{item.platform}</td>
+                {/* <td>{item.platform}</td> */}
                 <td>{item.platform_npm}</td>
                 <td>{dayjs(item.sessionStart).format("DD-MM-YYYY hh:ss A")}</td>
                 <td>{dayjs(item.sessionEnd).format("DD-MM-YYYY hh:ss A")}</td>
