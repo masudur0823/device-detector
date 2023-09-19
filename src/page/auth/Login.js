@@ -4,6 +4,8 @@ import { Button, Stack } from "@mui/material";
 import { addDoc, collection } from "firebase/firestore";
 import DeviceDetector from "device-detector-js";
 import { db } from "../../firebase/firebase_config";
+import { v4 as uuid } from "uuid";
+import axios from "axios";
 
 export default function Login() {
   const provider = new GoogleAuthProvider();
@@ -11,36 +13,37 @@ export default function Login() {
   const DeviceCollectionRef = collection(db, "deviceInfo");
   const deviceDetector = new DeviceDetector();
   const device = deviceDetector.parse(navigator.userAgent);
-  const [cookie, setCookie] = useState("");
+
+  const [deviceId, setDeviceId] = useState();
+  const [ipAddress, setIpAdress] = useState("");
+
   useEffect(() => {
-    // Check if a device identifier exists in the cookie
-    const deviceIdentifier = getCookie("device_id");
-    setCookie(deviceIdentifier);
-    if (!deviceIdentifier) {
-      // Generate a unique identifier and store it in a cookie
-      const uniqueIdentifier = generateUniqueIdentifier();
-      document.cookie = `device_id=${uniqueIdentifier}; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=/`;
+    const deviceIdFromCookie = document.cookie.match(/deviceId=(\w+)/);
+    if (deviceIdFromCookie) {
+      // console.log(deviceIdFromCookie[1]);
+      setDeviceId(deviceIdFromCookie.input.slice(9));
+    } else {
+      const newDeviceId = uuid();
+
+      document.cookie = `deviceId=${newDeviceId}; expires=365`;
+      setDeviceId(newDeviceId);
     }
+    getIp();
   }, []);
 
-  const getCookie = (name) => {
-    const cookieValue = document.cookie.match(
-      `(^|;)\\s*${name}\\s*=\\s*([^;]+)`
-    );
-    return cookieValue ? cookieValue.pop() : null;
-  };
-
-  const generateUniqueIdentifier = () => {
-    // Generate a unique identifier (you may want to use a more sophisticated method)
-    return Date.now().toString(36) + Math.random().toString(36).substr(2);
+  const getIp = async () => {
+    const res = await axios.get("https://api.ipify.org/?format=json");
+    setIpAdress(res.data.ip);
   };
 
   const create = async () => {
     const platformInfo = device.os.name + " " + device.os.version;
     const date = new Date();
+
     await addDoc(DeviceCollectionRef, {
       date: date.toISOString(),
-      uniqueId: cookie,
+      uniqueId: deviceId,
+      ipAddress: ipAddress,
       platform_npm: platformInfo,
       platform: navigator.userAgent,
       sessionStart: date.toISOString(),
@@ -58,6 +61,7 @@ export default function Login() {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         const user = result.user;
+        console.log(credential);
         localStorage.setItem("accessToken", token);
         localStorage.setItem("userInfo", JSON.stringify(user));
         window.location.reload();

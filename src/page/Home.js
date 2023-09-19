@@ -8,6 +8,7 @@ function Home() {
   };
   let data = JSON.parse(localStorage.getItem("userInfo"));
   console.log(data.photoURL);
+
   return (
     <Stack justifyContent="center" alignItems="center" sx={{ height: "100vh" }}>
       <Avatar src={data.photoUrl} />

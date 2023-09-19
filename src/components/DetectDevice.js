@@ -9,6 +9,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase/firebase_config";
 import dayjs from "dayjs";
+// import { v4 as uuid } from "uuid";
 
 function DetectDevice() {
   // const [isOnline, setIsOnline] = useState(false);
@@ -45,13 +46,30 @@ function DetectDevice() {
 
   // crud -----------------------------------------
 
+  // const [deviceId, setDeviceId] = useState();
+
+  // useEffect(() => {
+  //   const deviceIdFromCookie = document.cookie.match(/deviceId=(\w+)/);
+  //   if (deviceIdFromCookie) {
+  //     // console.log(deviceIdFromCookie[1]);
+  //     setDeviceId(deviceIdFromCookie.input.slice(9));
+  //   } else {
+  //     const newDeviceId = uuid();
+
+  //     document.cookie = `deviceId=${newDeviceId}; expires=365`;
+  //     setDeviceId(newDeviceId);
+  //   }
+  // }, []);
+
   return (
     <>
+      {/* <h1>Your device ID is: {deviceId}</h1> */}
       <table border="1px solid gry" cellPadding="0" cellSpacing="0">
         <thead>
           <tr>
             <th>Serial</th>
             <th>Unique ID</th>
+            <th>IP</th>
             <th>Name</th>
             <th>Email</th>
             <th>Date</th>
@@ -69,6 +87,7 @@ function DetectDevice() {
               <tr key={i}>
                 <td>{i}</td>
                 <td>{item?.uniqueId}</td>
+                <td>{item?.ipAddress}</td>
                 <td>{item?.name}</td>
                 <td>{item?.email}</td>
                 <td>{dayjs(item.date).format("DD-MM-YYYY hh:ss A")}</td>
