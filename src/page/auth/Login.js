@@ -15,7 +15,7 @@ export default function Login() {
   const device = deviceDetector.parse(navigator.userAgent);
 
   const [deviceId, setDeviceId] = useState();
-  const [ipAddress, setIpAdress] = useState("");
+  const [ipAddress, setIpAdress] = useState({});
 
   useEffect(() => {
     const deviceIdFromCookie = document.cookie.match(/deviceId=(\w+)/);
@@ -28,58 +28,61 @@ export default function Login() {
       document.cookie = `deviceId=${newDeviceId}; expires=365`;
       setDeviceId(newDeviceId);
     }
-    getIp();
+    // getIp();
   }, []);
 
   const getIp = async () => {
-    const res = await axios.get("https://api.ipify.org/?format=json");
+    const res = await axios.get("https://geolocation-db.com/json");
+    console.log(res.data);
     setIpAdress(res.data.ip);
   };
 
   const create = async () => {
     const platformInfo = device.os.name + " " + device.os.version;
     const date = new Date();
+    getIp();
+    
 
-    await addDoc(DeviceCollectionRef, {
-      date: date.toISOString(),
-      uniqueId: deviceId,
-      ipAddress: ipAddress,
-      platform_npm: platformInfo,
-      platform: navigator.userAgent,
-      sessionStart: date.toISOString(),
-      sessionEnd: date.toISOString(),
-      token: "cdkmckmkdmkf",
-      userName: "imtiaz",
-      phone: "01980573601",
-    });
+    // await addDoc(DeviceCollectionRef, {
+    //   date: date.toISOString(),
+    //   uniqueId: deviceId,
+    //   ipAddress: ipAddress,
+    //   platform_npm: platformInfo,
+    //   platform: navigator.userAgent,
+    //   sessionStart: date.toISOString(),
+    //   sessionEnd: date.toISOString(),
+    //   token: "cdkmckmkdmkf",
+    //   userName: "imtiaz",
+    //   phone: "01980573601",
+    // });
   };
 
   const handleLogin = () => {
     create();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
-        console.log(credential);
-        localStorage.setItem("accessToken", token);
-        localStorage.setItem("userInfo", JSON.stringify(user));
-        window.location.reload();
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log("errorCode:", errorCode);
-        console.log("errorMessage:", errorMessage);
-        console.log("email:", email);
-        console.log("credential:", credential);
-        // ...
-      });
+    // signInWithPopup(auth, provider)
+    //   .then((result) => {
+    //     const credential = GoogleAuthProvider.credentialFromResult(result);
+    //     const token = credential.accessToken;
+    //     const user = result.user;
+    //     console.log(credential);
+    //     localStorage.setItem("accessToken", token);
+    //     localStorage.setItem("userInfo", JSON.stringify(user));
+    //     window.location.reload();
+    //   })
+    //   .catch((error) => {
+    //     // Handle Errors here.
+    //     const errorCode = error.code;
+    //     const errorMessage = error.message;
+    //     // The email of the user's account used.
+    //     const email = error.customData.email;
+    //     // The AuthCredential type that was used.
+    //     const credential = GoogleAuthProvider.credentialFromError(error);
+    //     console.log("errorCode:", errorCode);
+    //     console.log("errorMessage:", errorMessage);
+    //     console.log("email:", email);
+    //     console.log("credential:", credential);
+    //     // ...
+    //   });
   };
 
   return (

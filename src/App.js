@@ -2,6 +2,9 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import DetectDevice from "./components/DetectDevice";
 import Login from "./page/auth/Login";
 import Home from "./page/Home";
+import { Route, Routes } from "react-router-dom";
+
+import Example from "./page/Example";
 
 function App() {
   const queryClient = new QueryClient();
@@ -12,18 +15,13 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         {/* <BasicTable /> */}
+        <Routes>
+          <Route path="login" element={<Login />} />
 
-        {!token ? (
-          <Login />
-        ) : (
-          <>
-            {data?.email === "masudur0823@gmail.com" ? (
-              <DetectDevice />
-            ) : (
-              <Home />
-            )}
-          </>
-        )}
+          <Route path="/" element={<Home />} />
+          <Route path="detectDevice" element={<DetectDevice />} />
+          <Route path="task" element={<Example/>} />
+        </Routes>
       </QueryClientProvider>
     </>
   );
